@@ -26,10 +26,6 @@ public class ConsoleLogStorage extends AbstractLogStorage {
         sb.append(" | 操作内容: ").append(records.getContent() != null ? records.getContent() : "无");
         sb.append(" | 操作时间: ").append(records.getTime() != null ?
                 records.getTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) : "无");
-        if (records.getThrowable() != null){
-            sb.append(" | 异常信息: ").append(records.getThrowable().getMessage());
-        }
-
         // 处理额外信息
         if (records.getExtra() != null && !records.getExtra().isEmpty()) {
             sb.append(" | 扩展信息: ");
@@ -43,4 +39,13 @@ public class ConsoleLogStorage extends AbstractLogStorage {
         return sb.toString();
     }
 
+    @Override
+    protected boolean shouldStoreWhenException(Throwable ex) {
+        return true;
+    }
+
+    @Override
+    protected void handleException(Throwable ex) {
+        log.error("【操作日志】发生异常: {}", ex.getMessage());
+    }
 }

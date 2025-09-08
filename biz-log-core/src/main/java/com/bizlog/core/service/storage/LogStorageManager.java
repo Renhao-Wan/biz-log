@@ -30,7 +30,7 @@ public class LogStorageManager {
         if (!storageMap.containsKey(storageBeanName)) {
             throw new IllegalArgumentException("storageBeanName: " + storageBeanName + " is not exist");
         }
-        storageMap.get(storageBeanName).store(records);
+        storageMap.get(storageBeanName).doStore(records);
     }
 
     public String getDefaultStorageBeanName() {

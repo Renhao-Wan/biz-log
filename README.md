@@ -53,6 +53,8 @@ public class UserService {
 | storageBeanName | String | 存储器名称 | 空字符串（使用默认存储器） |
 | extras | ExtraValue[] | 自定义额外参数（v支持模版语法） | 空数组 |
 
+- bizlog在1.1.0版本进行了移除
+
 ### 3.2 SpEL 语法速查
 
 | 类别              | 语法示例                                       | 说明                                             |
@@ -216,7 +218,7 @@ public class MyCustomLogTemplateParser implements LogTemplateParser {
 ### 5.4 自定义存储器
 
 默认使用 `consoleLogStorage` 存储器进行存储：即打印业务日志到控制台上
-继承`AbstractLogStorage`抽象类来自定义日志存储方式：
+继承`AbstractLogStorage`抽象类来自定义日志存储方式(1.1.1版本进行了完善)：
 
 ```java
 @Component("customStorage")
@@ -251,6 +253,7 @@ biz:
 
 ### 5.5 自定义错误处理器
 
+是对存储时发生的异常进行处理，例如：异步存储过程中线程池发生异常、解析模版时模版语法出现错误等
 实现`LogErrorHandler`接口来自定义错误处理方式(同步异步记录失败时均会调用)：
 
 ```java
@@ -489,4 +492,30 @@ flowchart TD
 ### 8.4 版本迭代
 
 - 版本1.0.0 - 初始发布
+
 - 版本1.1.0 - 注解@bizlog移除bizId属性（若使用了_SpEL Assistant_，src/main/resources/spel-extension.json文件中移除相应的部分）
+
+- 版本1.1.1 - 完善存储器异常处理机制
+  ```java
+  @Component("customStorage")
+  public class CustomLogStorage extends AbstractLogStorage {
+  
+      @Override
+      public void store(BizLogRecord record) {
+          // 自定义存储逻辑，如存储到数据库、ES等
+          System.out.println("自定义存储日志：" + record);
+      }
+      
+      // 方法发生异常时是否继续进行存储
+      @Override
+      protected boolean shouldStoreWhenException(Throwable ex) {
+          return true;
+      }
+  
+      // 对异常进行存储
+      @Override
+      protected void handleException(Throwable ex) {
+          log.error("【操作日志】发生异常: {}", ex.getMessage());
+      }
+  }
+  ```

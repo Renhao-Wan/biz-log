@@ -27,7 +27,7 @@ public class DefaultLogErrorHandler implements LogErrorHandler {
         map.put("error", ex.getMessage());
         map.put("异常处理器", this.getClass().getSimpleName());
         records.setExtra(map);
-        consoleLogStorage.store(records);
+        consoleLogStorage.doStore(records);
         throw new BizLogException(ex.getMessage(), ex);
     }
 }
