@@ -14,7 +14,7 @@ biz-log-spring-boot-starter是一个轻量级的业务日志记录框架，基�
 <dependency>
    <groupId>com.bizlog</groupId>
    <artifactId>biz-log-spring-boot-starter</artifactId>
-   <version>1.0.0</version>
+   <version>1.0.0</version>             <!--以下载的最新版本为准-->
 </dependency>
 ```
 
