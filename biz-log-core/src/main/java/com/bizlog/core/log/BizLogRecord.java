@@ -17,7 +17,6 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BizLogRecord {
-    private String bizId;                   // 业务主键，如 courseId
     private AbstractBizAction action;       // 动作编码（删除/新增…）
     private String content;                 // 模板解析后的文本
     private Throwable throwable;                // 异常

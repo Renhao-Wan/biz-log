@@ -22,7 +22,6 @@ public class ConsoleLogStorage extends AbstractLogStorage {
     private String combineRecords(BizLogRecord records) {
         StringBuilder sb = new StringBuilder();
         sb.append("【操作日志】");
-        sb.append("业务ID: ").append(records.getBizId() != null ? records.getBizId() : "无");
         sb.append(" | 操作类型: ").append(records.getAction() != null ? records.getAction().getDesc() : "未指定");
         sb.append(" | 操作内容: ").append(records.getContent() != null ? records.getContent() : "无");
         sb.append(" | 操作时间: ").append(records.getTime() != null ?

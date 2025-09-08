@@ -26,15 +26,15 @@ biz-log-spring-boot-starter是一个轻量级的业务日志记录框架，基�
 @Service
 public class UserService {
 
-   @BizLog(
-           value = "用户#{#user.name}(#{#user.id})进行了#{#action}操作",
-           bizId = "#{#user.id}",
-           actionCode = StdBizAction.UPDATE_CODE,
-           extras = { @ExtraValue(k = "test", v = "额外参数") }
-   )
-   public void updateUser(User user, String action) {
-      // 业务逻辑
-   }
+    @BizLog(
+        value = "用户#{#user.name}(#{#user.id})进行了#{#action}操作",
+        bizId = "#{#user.id}",
+        actionCode = StdBizAction.UPDATE_CODE,
+        extras = { @ExtraValue(k = "test", v = "额外参数") }
+    )
+    public void updateUser(User user, String action) {
+        // 业务逻辑
+    }
 }
 ```
 
@@ -440,7 +440,7 @@ flowchart TD
 ### 8.2 如何让IDEA识别SpEL表达式？
 1. 第一步：下载插件 _SpEL Assistant_
 
-3. 第二步：把下面这段内容直接放到当前工程`src/main/resources/spel-extension.json`
+2. 第二步：把下面这段内容直接放到当前工程`src/main/resources/spel-extension.json`
    保存后重启 IDEA，即可让  _SpEL Assistant_  对 `@BizLog` 注解里的 `value` 和 `bizId` 字段实现高亮与代码提示。
 
    ```json
@@ -485,3 +485,8 @@ flowchart TD
    ```
 
 3. 添加`src/main/resources/spel-extension.json`文件后建议使用模版语法时都加`#{}`边界，否则插件会报错（不影响程序的正常执行）
+
+### 8.4 版本迭代
+
+- 版本1.0.0 - 初始发布
+- 版本1.1.0 - 注解@bizlog移除bizId属性（若使用了_SpEL Assistant_，src/main/resources/spel-extension.json文件中移除相应的部分）

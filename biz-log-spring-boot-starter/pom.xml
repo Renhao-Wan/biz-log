@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.bizlog</groupId>
         <artifactId>biz-log-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.0</version>
     </parent>
 
     <artifactId>biz-log-spring-boot-starter</artifactId>
@@ -21,12 +21,10 @@
         <dependency>
             <groupId>com.bizlog</groupId>
             <artifactId>biz-log-core</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.bizlog</groupId>
             <artifactId>biz-log-autoconfigure</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

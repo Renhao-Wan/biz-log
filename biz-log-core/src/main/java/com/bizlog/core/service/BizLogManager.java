@@ -58,51 +58,45 @@ public class BizLogManager implements InitializingBean {
     }
 
     /* ========== 快捷方法 —— 手动调用 ========== */
-    public void record(String actionCode, String content,
-                       String bizId, boolean async, String storageBeanName, Map<String, Object> extra) {
+    public void record(String actionCode, String content, boolean async, String storageBeanName, Map<String, Object> extra) {
         BizLogRecord r = BizLogRecord.builder()
                 .action(BizActions.of(actionCode))
                 .content(content)
                 .extra(extra)
-                .bizId(bizId)
                 .time(LocalDateTime.now())
                 .build();
         recordChoose(async, r, storageBeanName);
     }
 
     public void record(String actionCode, String content,
-                       String bizId, boolean async, String storageBeanName) {
-        record(actionCode, content, bizId, async, storageBeanName, null);
+                       boolean async, String storageBeanName) {
+        record(actionCode, content, async, storageBeanName, null);
     }
 
     public void record(String actionCode, String content,
-                       String bizId, boolean async, Map<String, Object> extra){
-        record(actionCode, content, bizId, async, null, extra);
+                       boolean async, Map<String, Object> extra){
+        record(actionCode, content, async, null, extra);
     }
 
     public void record(String actionCode, String content,
-                       String bizId, boolean async) {
-        record(actionCode, content, bizId, async, null, null);
+                       boolean async) {
+        record(actionCode, content, async, null, null);
     }
 
     /* ========== 解析模板并记录（供切面调用） ========== */
     public void record(String template,
                        ParseContext ctx,
                        boolean async, String storageBeanName) {
-        String bizIdTemplate = String.valueOf(ctx.getExtra().get("bizId"));
         String content = parser.parse(template, ctx);             // 解析模板
-        String bizId = parser.parse(bizIdTemplate, ctx);
         Map<String, Object> extra = ctx.getExtra()
                 .entrySet()
                 .stream()
-                .filter(e -> !"actionCode".equals(e.getKey())
-                        && !"bizId".equals(e.getKey()))
+                .filter(e -> !"actionCode".equals(e.getKey()))
                 .collect(java.util.stream.Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         parserExtraValues(extra, ctx);        // 解析 extra （解析ExtraValue注解中的v）
         BizLogRecord record = BizLogRecord.builder()
                 .action(BizActions.of((String) ctx.getExtra().get("actionCode")))
                 .content(content)
-                .bizId(bizId)
                 .throwable(ctx.getThrown())
                 .extra(extra)              // 过滤掉 actionCode 和 bizId
                 .time(LocalDateTime.now())

@@ -46,7 +46,6 @@ public class BizLogAspect {
             Map<String, Object> argsMap = this.buildExtraMap(method, pjp.getArgs(), nameDiscoverer);
             Map<String, Object> extra = new HashMap<>();
             extra.put("actionCode", bizLog.actionCode());
-            extra.put("bizId", bizLog.bizId());
             extendExtraValue(extra);         // 扩展参数（接口）
             extendExtraValue(bizLog.extras(), extra);   // 扩展参数（ExtraValue注解）
 

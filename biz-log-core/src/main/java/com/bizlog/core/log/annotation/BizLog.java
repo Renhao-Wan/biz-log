@@ -11,7 +11,6 @@ import java.lang.annotation.*;
 public @interface BizLog {
 
     String value();                      // 内容，支持模板语法
-    String bizId() default "";           // 业务主键，支持模板语法
     String actionCode() default "";      // 动作编码
     boolean async() default true;
     String storageBeanName() default "";   // 存储器名称
