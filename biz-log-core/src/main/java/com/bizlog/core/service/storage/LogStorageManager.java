@@ -3,6 +3,7 @@ package com.bizlog.core.service.storage;
 import com.bizlog.core.log.BizLogProperties;
 import com.bizlog.core.log.BizLogRecord;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,17 +24,19 @@ public class LogStorageManager {
         );
     }
 
-    public void store(BizLogRecord records, String storageBeanName) {
-        if (storageBeanName == null || storageBeanName.isBlank()) {
+    public void store(BizLogRecord records, String... storageBeanName) {
+        if (storageBeanName == null || storageBeanName.length == 0) {
             storageBeanName = prop.getStorageBeanName();
         }
-        if (!storageMap.containsKey(storageBeanName)) {
-            throw new IllegalArgumentException("storageBeanName: " + storageBeanName + " is not exist");
+        for (String beanName : Arrays.stream(storageBeanName).distinct().toList()) {
+            if (!storageMap.containsKey(beanName)) {
+                throw new IllegalArgumentException("storageBeanName: " + beanName + " is not exist");
+            }
+            storageMap.get(beanName).doStore(records);
         }
-        storageMap.get(storageBeanName).doStore(records);
     }
 
     public String getDefaultStorageBeanName() {
-        return prop.getStorageBeanName();
+        return Arrays.toString(prop.getStorageBeanName());
     }
 }

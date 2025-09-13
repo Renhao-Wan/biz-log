@@ -38,27 +38,17 @@ public class BizLogManager implements InitializingBean {
     }
 
     /* ========== 自定义存储器同步记录 ========== */
-    public void record(BizLogRecord record, String storageBeanName) {
+    public void record(BizLogRecord record, String... storageBeanName) {
         storageManager.store(record, storageBeanName);
     }
 
     /* ========== 自定义存储器异步记录 ========== */
-    public CompletableFuture<Void> recordAsync(BizLogRecord record, String storageBeanName) {
+    public CompletableFuture<Void> recordAsync(BizLogRecord record, String... storageBeanName) {
             return CompletableFuture.runAsync(() -> record(record, storageBeanName), executor);
     }
 
-    /* ========== 同步记录 ========== */
-    public void record(BizLogRecord record) {
-        record(record, null);  // 使用默认存储器
-    }
-
-    /* ========== 异步记录 ========== */
-    public CompletableFuture<Void> recordAsync(BizLogRecord record) {
-        return recordAsync(record, null);
-    }
-
     /* ========== 快捷方法 —— 手动调用 ========== */
-    public void record(String actionCode, String content, boolean async, String storageBeanName, Map<String, Object> extra) {
+    public void record(String actionCode, String content, boolean async, Map<String, Object> extra, String... storageBeanName) {
         BizLogRecord r = BizLogRecord.builder()
                 .action(BizActions.of(actionCode))
                 .content(content)
@@ -69,24 +59,14 @@ public class BizLogManager implements InitializingBean {
     }
 
     public void record(String actionCode, String content,
-                       boolean async, String storageBeanName) {
-        record(actionCode, content, async, storageBeanName, null);
-    }
-
-    public void record(String actionCode, String content,
-                       boolean async, Map<String, Object> extra){
-        record(actionCode, content, async, null, extra);
-    }
-
-    public void record(String actionCode, String content,
-                       boolean async) {
-        record(actionCode, content, async, null, null);
+                       boolean async, String... storageBeanName) {
+        record(actionCode, content, async, null, storageBeanName);
     }
 
     /* ========== 解析模板并记录（供切面调用） ========== */
     public void record(String template,
                        ParseContext ctx,
-                       boolean async, String storageBeanName) {
+                       boolean async, String[] storageBeanName) {
         String content = parser.parse(template, ctx);             // 解析模板
         Map<String, Object> extra = ctx.getExtra()
                 .entrySet()
@@ -104,7 +84,7 @@ public class BizLogManager implements InitializingBean {
         recordChoose(async, record, storageBeanName);
     }
 
-    private void recordChoose(boolean async, BizLogRecord record, String storageBeanName){
+    private void recordChoose(boolean async, BizLogRecord record, String[] storageBeanName){
         if (async) {
             recordAsync(record, storageBeanName)
                     .whenComplete((v, e) -> {

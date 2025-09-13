@@ -13,6 +13,6 @@ public @interface BizLog {
     String value();                      // 内容，支持模板语法
     String actionCode() default "";      // 动作编码
     boolean async() default true;
-    String storageBeanName() default "";   // 存储器名称
+    String[] storageBeanName() default {};   // 存储器名称
     ExtraValue[] extras() default {};       // 扩展字段
 }

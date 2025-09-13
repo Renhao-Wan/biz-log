@@ -12,9 +12,9 @@ biz-log-spring-boot-starter是一个轻量级的业务日志记录框架，基�
 
 ```xml
 <dependency>
-   <groupId>com.bizlog</groupId>
-   <artifactId>biz-log-spring-boot-starter</artifactId>
-   <version>1.0.0</version>             <!--以下载的最新版本为准-->
+    <groupId>com.bizlog</groupId>
+    <artifactId>biz-log-spring-boot-starter</artifactId>
+    <version>1.0.0</version>             <!--以下载的最新版本为准-->
 </dependency>
 ```
 
@@ -44,35 +44,35 @@ public class UserService {
 
 `@BizLog`注解支持以下参数：
 
-| 参数名 | 类型 | 描述 | 默认值 |
-|-------|------|------|:------|
-| value | String | 日志内容，支持模板语法 | 无 |
-| bizId | String | 业务主键，支持模板语法 | 空字符串 |
-| actionCode | String | 动作编码 | 空字符串 |
-| async | boolean | 是否异步记录 | true |
-| storageBeanName | String | 存储器名称 | 空字符串（使用默认存储器） |
-| extras | ExtraValue[] | 自定义额外参数（v支持模版语法） | 空数组 |
+| 参数名          | 类型         | 描述                            | 默认值                     |
+| --------------- | ------------ | ------------------------------- | :------------------------- |
+| value           | String       | 日志内容，支持模板语法          | 无                         |
+| bizId           | String       | 业务主键，支持模板语法          | 空字符串                   |
+| actionCode      | String       | 动作编码                        | 空字符串                   |
+| async           | boolean      | 是否异步记录                    | true                       |
+| storageBeanName | String       | 存储器名称                      | 空字符串（使用默认存储器） |
+| extras          | ExtraValue[] | 自定义额外参数（v支持模版语法） | 空数组                     |
 
 - bizlog在1.1.0版本进行了移除
 
 ### 3.2 SpEL 语法速查
 
-| 类别              | 语法示例                                       | 说明                                             |
-| ----------------- | ---------------------------------------------- | ------------------------------------------------ |
-| **字面量**        | `'hello'`, `123`, `true`, `null`               | 字符串、数字、布尔、null                         |
-| **变量**          | `#{#user}`, `#{#ret}`, `#{#ex}`, `#{#method}`  | 通过 `EvaluationContext#setVariable` 注入        |
-| **根对象**        | `#{#root}`                                     | 固定指向根对象                                   |
-| **属性导航**      | `#{#user.name}`, `#{#user?.address?.city}`     | 支持 POJO + 安全导航 `?.`                        |
-| **集合 & Map**    | `#{#list[0]}`, `#{#map['key']}`                | 已注册 `MapAccessor`                             |
-| **集合筛选**      | `#{#users.?[age > 18]}`                        | 返回新集合                                       |
-| **集合投影**      | `#{#users.![name]}`                            | 把每个元素的 name 组成新集合                     |
-| **方法调用**      | `#{#user.getName()}`, `#{'abc'.toUpperCase()}` | Java 普通实例/静态方法                           |
-| **静态方法**      | `#{T(java.time.LocalDateTime).now()}`          | `T(全限定类名)` 调用静态方法                     |
-| **Bean 引用**     | `#{@userService.findName(#user.id)}`           | `@beanName` 语法，已配置 `BeanFactoryResolver`   |
-| **运算符**        | `#{1 + 2}`, `#{age > 18 ? '成年' : '未成年'}`  | 算术、关系、三目、Elvis `?:`                     |
-| **字符串拼接**    | `#{'订单号：' + #order.no}`                    | 直接拼接                                         |
-| **正则匹配**      | `#{#email matches '[\\w.-]+@[\\w.-]+'}`        | 返回布尔                                         |
-| **内联 List/Map** | `#{ {'A','B'} }`, `#{ {name:'Tom', age:20} }`  | 快速构造集合/Map                                 |
+| 类别              | 语法示例                                       | 说明                                           |
+| ----------------- | ---------------------------------------------- | ---------------------------------------------- |
+| **字面量**        | `'hello'`, `123`, `true`, `null`               | 字符串、数字、布尔、null                       |
+| **变量**          | `#{#user}`, `#{#ret}`, `#{#ex}`, `#{#method}`  | 通过 `EvaluationContext#setVariable` 注入      |
+| **根对象**        | `#{#root}`                                     | 固定指向根对象                                 |
+| **属性导航**      | `#{#user.name}`, `#{#user?.address?.city}`     | 支持 POJO + 安全导航 `?.`                      |
+| **集合 & Map**    | `#{#list[0]}`, `#{#map['key']}`                | 已注册 `MapAccessor`                           |
+| **集合筛选**      | `#{#users.?[age > 18]}`                        | 返回新集合                                     |
+| **集合投影**      | `#{#users.![name]}`                            | 把每个元素的 name 组成新集合                   |
+| **方法调用**      | `#{#user.getName()}`, `#{'abc'.toUpperCase()}` | Java 普通实例/静态方法                         |
+| **静态方法**      | `#{T(java.time.LocalDateTime).now()}`          | `T(全限定类名)` 调用静态方法                   |
+| **Bean 引用**     | `#{@userService.findName(#user.id)}`           | `@beanName` 语法，已配置 `BeanFactoryResolver` |
+| **运算符**        | `#{1 + 2}`, `#{age > 18 ? '成年' : '未成年'}`  | 算术、关系、三目、Elvis `?:`                   |
+| **字符串拼接**    | `#{'订单号：' + #order.no}`                    | 直接拼接                                       |
+| **正则匹配**      | `#{#email matches '[\\w.-]+@[\\w.-]+'}`        | 返回布尔                                       |
+| **内联 List/Map** | `#{ {'A','B'} }`, `#{ {name:'Tom', age:20} }`  | 快速构造集合/Map                               |
 
 ### 3.3手动调用
 
@@ -137,6 +137,7 @@ biz:
 ```
 
 ## 5. 业务拓展
+
 ### 5.1 动作编码管理
 
 _内置动作编码_
@@ -147,6 +148,7 @@ _内置动作编码_
 
 _注册自定义动作编码_
 当内置动作编码不足以满足需求时，可以通过 BizActions 类注册自定义动作编码：
+
 ```java
 // 注册方式1：使用AbstractBizAction对象
 AbstractBizAction customAction = new AbstractBizAction() {
@@ -179,6 +181,7 @@ BizActions.register(actions);
 
 LogTemplateParser 接口定义了模板解析的核心方法
 项目提供了两种内置解析器：
+
 - SpelLogTemplateParser ：SpEL表达式解析器，优先级为1
 
   ```markdown
@@ -245,6 +248,7 @@ public void userOperation() {
 ```
 
 在yml文件中配置全局默认存储器
+
 ```yaml
 biz:
   log:
@@ -411,6 +415,7 @@ public class OrderService {
 5. 自定义存储器时，需要将实现类注册为Spring Bean，并指定正确的bean名称。
 
 ## 8. 其它
+
 ### 8.1 执行流程图
 
 ```mermaid
@@ -441,6 +446,7 @@ flowchart TD
 ```
 
 ### 8.2 如何让IDEA识别SpEL表达式？
+
 1. 第一步：下载插件 _SpEL Assistant_
 
 2. 第二步：把下面这段内容直接放到当前工程`src/main/resources/spel-extension.json`
@@ -491,40 +497,78 @@ flowchart TD
 
 ### 8.4 版本迭代
 
-- 版本1.0.0 - 初始发布
+#### 版本1.0.0
 
-- 版本1.1.0 - 注解@bizlog移除bizId属性（若使用了_SpEL Assistant_，src/main/resources/spel-extension.json文件中移除相应的部分）
+初始发布
 
-- 版本1.1.1 - 完善存储器异常处理机制
-  ```java
-  @Component("customStorage")
-  public class CustomLogStorage extends AbstractLogStorage {
-  
-      @Override
-      public void store(BizLogRecord record) {
-          // 自定义存储逻辑，如存储到数据库、ES等
-          System.out.println("自定义存储日志：" + record);
-      }
-      
-      // 方法发生异常时是否继续进行存储
-      @Override
-      protected boolean shouldStoreWhenException(Throwable ex) {
-          return true;
-      }
-  
-      // 对异常进行存储
-      @Override
-      protected void handleException(Throwable ex) {
-          log.error("【操作日志】发生异常: {}", ex.getMessage());
-      }
-  }
-  ```
-- 版本1.1.2 - 可以设置控制台存储的日志记录级别
+#### 版本1.1.0
+
+注解@bizlog移除bizId属性（若使用了_SpEL Assistant_，src/main/resources/spel-extension.json文件中移除相应的部分）
+
+#### 版本1.1.1
+
+完善存储器异常处理机制
 
   ```java
-  @Bean
-  public ConsoleLogStorage.ConsoleLogConfig logLevel() {
-      return ConsoleLogStorage.ConsoleLogConfig.builder()
-          .logLevel(ConsoleLogStorage.ConsoleLogConfig.INFO)            // 设置输出日志级别
-          .build();
+@Component("customStorage")
+public class CustomLogStorage extends AbstractLogStorage {
+
+    @Override
+    public void store(BizLogRecord record) {
+        // 自定义存储逻辑，如存储到数据库、ES等
+        System.out.println("自定义存储日志：" + record);
+    }
+    
+    // 方法发生异常时是否继续进行存储
+    @Override
+    protected boolean shouldStoreWhenException(Throwable ex) {
+        return true;
+    }
+
+    // 对异常进行存储
+    @Override
+    protected void handleException(Throwable ex) {
+        log.error("【操作日志】发生异常: {}", ex.getMessage());
+    }
+}
   ```
+
+#### 版本1.1.2
+
+可以设置控制台存储的日志记录级别
+
+  ```java
+@Bean
+public ConsoleLogStorage.ConsoleLogConfig logLevel() {
+    return ConsoleLogStorage.ConsoleLogConfig.builder()
+        .logLevel(ConsoleLogStorage.ConsoleLogConfig.INFO)            // 设置输出日志级别
+        .build();
+  ```
+
+
+#### 版本1.1.3
+支持多个存储器同时工作（注解>全局配置）
+  全局配置：
+
+  ```yml
+  biz:
+    log:
+      storage-bean-name: 
+      	- consoleLogStorage
+      	- customeLogStorage
+  ```
+
+  注解：
+
+  ```java
+  @BizLog(
+          value = "用户#{#user.name}(#{#user.id})进行了#{#action}操作",
+          actionCode = StdBizAction.UPDATE_CODE,
+      	storageBeanName = {consoleLogStorage, customeLogStorage}
+          extras = {
+              @ExtraValue(k = "userName", v = "#{#user.name}"),
+              @ExtraValue(k = "userId", v = "#{#user.id}"),
+          }
+      )
+  ```
+

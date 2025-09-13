@@ -14,7 +14,7 @@ public class BizLogProperties {
     private boolean enabled = true;
 
     /** 默认存储器 */
-    private String storageBeanName = LogConstant.DEFAULT_STORAGE_BEAN_NAME;
+    private String[] storageBeanName = new String[]{LogConstant.DEFAULT_STORAGE_BEAN_NAME};
 
     /** 异步线程池参数 */
     private final Async async = new Async();
