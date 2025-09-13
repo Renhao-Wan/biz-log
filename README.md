@@ -519,3 +519,12 @@ flowchart TD
       }
   }
   ```
+- 版本1.1.2 - 可以设置控制台存储的日志记录级别
+
+  ```java
+  @Bean
+  public ConsoleLogStorage.ConsoleLogConfig logLevel() {
+      return ConsoleLogStorage.ConsoleLogConfig.builder()
+          .logLevel(ConsoleLogStorage.ConsoleLogConfig.INFO)            // 设置输出日志级别
+          .build();
+  ```

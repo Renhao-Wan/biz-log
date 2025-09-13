@@ -3,6 +3,9 @@ package com.bizlog.core.service.storage.impl;
 import com.bizlog.core.log.BizLogRecord;
 import com.bizlog.core.log.LogConstant;
 import com.bizlog.core.service.storage.AbstractLogStorage;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.format.DateTimeFormatter;
@@ -11,11 +14,31 @@ import java.util.Map;
 /**
  * 控制台日志存储
  */
+@AllArgsConstructor
 @Slf4j(topic = LogConstant.BIZ_LOG)
 public class ConsoleLogStorage extends AbstractLogStorage {
+
+    private ConsoleLogConfig logConfig;
+
     @Override
     public void store(BizLogRecord records) {
         log.info(combineRecords(records));
+        switch (logConfig.getLogLevel().toUpperCase()){
+            case ConsoleLogConfig.DEBUG:
+                log.debug(combineRecords(records));
+                break;
+            case ConsoleLogConfig.WARN:
+                log.warn(combineRecords(records));
+                break;
+            case ConsoleLogConfig.ERROR:
+                log.error(combineRecords(records));
+                break;
+            case ConsoleLogConfig.TRACE:
+                log.trace(combineRecords(records));
+                break;
+            default:
+                log.info(combineRecords(records));
+        }
     }
 
     // 组合records
@@ -47,5 +70,19 @@ public class ConsoleLogStorage extends AbstractLogStorage {
     @Override
     protected void handleException(Throwable ex) {
         log.error("【操作日志】发生异常: {}", ex.getMessage());
+    }
+
+    @Builder
+    @Getter
+    public static class ConsoleLogConfig {
+
+        private String logLevel;
+
+        public static final String DEBUG = "DEBUG";
+        public static final String INFO = "INFO";
+        public static final String WARN = "WARN";
+        public static final String ERROR = "ERROR";
+        public static final String TRACE = "TRACE";
+
     }
 }
