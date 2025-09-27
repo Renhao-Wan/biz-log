@@ -5,7 +5,6 @@ import com.bizlog.core.log.LogConstant;
 import com.bizlog.core.service.storage.AbstractLogStorage;
 import com.bizlog.core.service.storage.LogStorageManager;
 import com.bizlog.core.service.storage.impl.ConsoleLogStorage;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +18,6 @@ import java.util.List;
 public class LogStorageConfiguration {
     @Bean(LogConstant.DEFAULT_STORAGE_BEAN_NAME)
     @ConditionalOnMissingBean(ConsoleLogStorage.class)
-    @ConditionalOnBean(ConsoleLogStorage.ConsoleLogConfig.class)
     public AbstractLogStorage consoleLogStorage(ConsoleLogStorage.ConsoleLogConfig logConfig) {
         return new ConsoleLogStorage(logConfig);
     }
