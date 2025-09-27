@@ -22,7 +22,6 @@ public class ConsoleLogStorage extends AbstractLogStorage {
 
     @Override
     public void store(BizLogRecord records) {
-        log.info(combineRecords(records));
         switch (logConfig.getLogLevel().toUpperCase()){
             case ConsoleLogConfig.DEBUG:
                 log.debug(combineRecords(records));
