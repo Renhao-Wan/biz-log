@@ -1,8 +1,8 @@
-# biz-log-spring-boot-starter  API文档
+# biz-log-spring-boot-starter
 
 ## 1. 项目介绍
 
-biz-log-spring-boot-starter是一个轻量级的业务日志记录框架，基于Spring Boot实现，提供了注解和手动调用两种方式来记录业务日志。框架支持异步记录、自定义存储方式、模板解析等功能，可以帮助开发者快速集成业务日志记录功能。
+biz-log-spring-boot-starter是一个轻量级的业务日志记录组件，基于Spring Boot实现，提供了注解和手动调用两种方式来记录业务日志。框架支持异步记录、自定义存储方式、模板解析等功能，可以帮助开发者快速集成业务日志记录功能。
 
 ## 2. 快速开始
 
@@ -12,9 +12,9 @@ biz-log-spring-boot-starter是一个轻量级的业务日志记录框架，基�
 
 ```xml
 <dependency>
-    <groupId>com.bizlog</groupId>
+    <groupId>io.github.renhao-wan</groupId>
     <artifactId>biz-log-spring-boot-starter</artifactId>
-    <version>1.0.0</version>             <!--以下载的最新版本为准-->
+    <version>${latest.version}</version>             <!--以下载的最新版本为准-->
 </dependency>
 ```
 
@@ -194,8 +194,8 @@ LogTemplateParser 接口定义了模板解析的核心方法
 可以通过实现 LogTemplateParser 接口并使用 @Order 注解指定优先级(CompositeLogTemplateParser 负责管理所有解析器，按 @Order 注解指定的优先级排序组成责任链)来添加自定义解析器：
 
 ```java
-import com.bizlog.core.service.parse.LogTemplateParser;
-import com.bizlog.core.service.parse.ParseContext;
+import parse.service.io.github.renhaowan.bizlog.core.LogTemplateParser;
+import parse.service.io.github.renhaowan.bizlog.core.ParseContext;
 import org.springframework.core.annotation.Order;
 
 @Order(2) // 优先级介于SpEL和纯文本之间
@@ -328,7 +328,7 @@ public class CustomLogErrorHandler implements LogErrorHandler {
        @Override
        public void store(BizLogRecord record) {
            // 在BizLogRecord中获取之前存的线程局部变量
-           SecurityContext securityContext = bizLogRecord.getExtra().get("securityContext")
+           SecurityContext securityContext = bizLogRecord.getExtra().get("securityContext");
            SecurityContextHolder.setContext(securityContext);
            // 继续进行其它业务操作
        }
@@ -454,7 +454,7 @@ flowchart TD
 
    ```json
    {
-     "com.bizlog.core.log.annotation.BizLog@value": {
+     "annotation.log.io.github.renhaowan.bizlog.core.BizLog@value": {
        "prefix": "#{",
        "suffix": "}",
        "method": {
@@ -466,7 +466,7 @@ flowchart TD
          { "name": "method", "type": "java.lang.reflect.Method" }
        ]
      },
-     "com.bizlog.core.log.annotation.BizLog@bizId": {
+     "annotation.log.io.github.renhaowan.bizlog.core.BizLog@bizId": {
        "prefix": "#{",
        "suffix": "}",
        "method": {
@@ -478,7 +478,7 @@ flowchart TD
          { "name": "method", "type": "java.lang.reflect.Method" }
        ]
      },
-     "com.bizlog.core.log.annotation.ExtraValue@v": {
+     "annotation.log.io.github.renhaowan.bizlog.core.ExtraValue@v": {
        "prefix": "#{",
        "suffix": "}",
        "method": {
@@ -519,7 +519,7 @@ public class CustomLogStorage extends AbstractLogStorage {
         System.out.println("自定义存储日志：" + record);
     }
     
-    // 方法发生异常时是否继续进行存储
+    // 方法发生异常时是否继续进行存储(注解标注的方法发生异常)
     @Override
     protected boolean shouldStoreWhenException(Throwable ex) {
         return true;
@@ -541,34 +541,35 @@ public class CustomLogStorage extends AbstractLogStorage {
 @Bean
 public ConsoleLogStorage.ConsoleLogConfig logLevel() {
     return ConsoleLogStorage.ConsoleLogConfig.builder()
-        .logLevel(ConsoleLogStorage.ConsoleLogConfig.INFO)            // 设置输出日志级别
-        .build();
+            .logLevel(ConsoleLogStorage.ConsoleLogConfig.INFO)            // 设置输出日志级别
+            .build();
+}
   ```
 
 
 #### 版本1.1.3
+
 支持多个存储器同时工作（注解>全局配置）
-  全局配置：
+全局配置：
 
   ```yml
-  biz:
-    log:
-      storage-bean-name: 
-      	- consoleLogStorage
-      	- customeLogStorage
+biz:
+  log:
+    storage-bean-name: 
+    	- consoleLogStorage
+    	- customeLogStorage
   ```
 
-  注解：
+注解：
 
   ```java
-  @BizLog(
-          value = "用户#{#user.name}(#{#user.id})进行了#{#action}操作",
-          actionCode = StdBizAction.UPDATE_CODE,
-      	storageBeanName = {consoleLogStorage, customeLogStorage}
-          extras = {
-              @ExtraValue(k = "userName", v = "#{#user.name}"),
-              @ExtraValue(k = "userId", v = "#{#user.id}"),
-          }
-      )
+@BizLog(
+        value = "用户#{#user.name}(#{#user.id})进行了#{#action}操作",
+        actionCode = StdBizAction.UPDATE_CODE,
+    	storageBeanName = {consoleLogStorage, customeLogStorage}
+        extras = {
+            @ExtraValue(k = "userName", v = "#{#user.name}"),
+            @ExtraValue(k = "userId", v = "#{#user.id}"),
+        }
+    )
   ```
-
