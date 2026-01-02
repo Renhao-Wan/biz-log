@@ -1,5 +1,9 @@
 package io.github.renhaowan.bizlog.core.service.parse;
 
+/**
+ * @author wan
+ * 日志模板解析器
+ */
 public interface LogTemplateParser {
     /**
      * 解析模板
@@ -12,6 +16,8 @@ public interface LogTemplateParser {
     /**
      * 模板是否支持当前语法
      * 用于责任链快速跳过
+     * @param template 模板
+     * @return 是否支持
      */
     default boolean support(String template) {
         return true;

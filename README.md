@@ -1,5 +1,7 @@
 # biz-log-spring-boot-starter
 
+[![Java CI with Maven](https://github.com/Renhao-Wan/biz-log/actions/workflows/maven.yml/badge.svg)](https://github.com/Renhao-Wan/biz-log/actions/workflows/maven.yml)
+
 ## 1. 项目介绍
 
 biz-log-spring-boot-starter是一个轻量级的业务日志记录组件，基于Spring Boot实现，提供了注解和手动调用两种方式来记录业务日志。框架支持异步记录、自定义存储方式、模板解析等功能，可以帮助开发者快速集成业务日志记录功能。

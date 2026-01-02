@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * @author wan
  * 业务操作统一访问入口
  **/
 @Slf4j(topic = LogConstant.BIZ_LOG)
@@ -28,6 +29,11 @@ public final class BizActions {
         }
     }
 
+    /**
+     * 注册业务动作
+     *
+     * @param action 业务动作
+     */
     public static void register(AbstractBizAction action) {
         AbstractBizAction old = REGISTRY.putIfAbsent(action.getCode(), action);
         if (old != null && old.equals(action)) {
@@ -37,10 +43,21 @@ public final class BizActions {
         REGISTRY.put(action.getCode(), action);
     }
 
+    /**
+     * 注册业务动作
+     *
+     * @param actions 业务动作
+     */
     public static void register(List<AbstractBizAction> actions){
         actions.forEach(BizActions::register);
     }
 
+    /**
+     * 注册业务动作
+     *
+     * @param code 业务动作编码
+     * @param desc 业务动作描述
+     */
     public static void register(String code, String desc) {
         register(new AbstractBizAction() {
             @Override
@@ -55,11 +72,23 @@ public final class BizActions {
         });
     }
 
+    /**
+     * 获取业务动作
+     *
+     * @param code 业务动作编码
+     * @return 业务动作
+     */
     public static AbstractBizAction of(String code) {
         return Optional.ofNullable(REGISTRY.get(code))
                 .orElseThrow(() -> new BizLogException("未注册的业务动作: " + code));
     }
 
+    /**
+     * 获取业务动作
+     *
+     * @param stdBizAction 业务动作
+     * @return 业务动作
+     */
     public static AbstractBizAction of(StdBizAction stdBizAction) {
         return REGISTRY.get(stdBizAction.getCode());
     }

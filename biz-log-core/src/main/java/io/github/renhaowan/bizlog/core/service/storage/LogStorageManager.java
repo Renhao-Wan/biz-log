@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * @author wan
  * 日志存储管理器
  * 策略模式
  */
@@ -17,6 +18,12 @@ public class LogStorageManager {
     private final Map<String, AbstractLogStorage> storageMap = new HashMap<>();
     private final BizLogProperties prop;
 
+    /**
+     * 构造函数
+     *
+     * @param storageList 日志存储器列表
+     * @param prop        日志配置属性
+     */
     public LogStorageManager(List<AbstractLogStorage> storageList, BizLogProperties prop) {
         this.prop = prop;
         storageList.forEach(
@@ -24,6 +31,12 @@ public class LogStorageManager {
         );
     }
 
+    /**
+     * 存储日志
+     *
+     * @param records             日志记录
+     * @param storageBeanName     存储器名称
+     */
     public void store(BizLogRecord records, String... storageBeanName) {
         if (storageBeanName == null || storageBeanName.length == 0) {
             storageBeanName = prop.getStorageBeanName();
@@ -36,6 +49,11 @@ public class LogStorageManager {
         }
     }
 
+    /**
+     * 获取默认存储器名称
+     *
+     * @return 默认存储器名称
+     */
     public String getDefaultStorageBeanName() {
         return Arrays.toString(prop.getStorageBeanName());
     }

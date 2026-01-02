@@ -4,11 +4,15 @@ import io.github.renhaowan.bizlog.core.log.BizLogRecord;
 import lombok.Getter;
 
 /**
- * 抽象日志存储器
- * 获取日志存储器的beanName
+ * @author wan
+ * 抽象日志存储器，获取日志存储器的beanName
  */
 @Getter
 public abstract class AbstractLogStorage implements LogStorage {
+
+    /**
+     * Bean名称，用于Spring容器中获取对应的LogStorage实例
+     */
     protected String beanName;
 
     @Override
@@ -18,14 +22,23 @@ public abstract class AbstractLogStorage implements LogStorage {
 
 
     /**
-     * 方法发生异常是否存储
+     * 判断当发生异常时，是否需要存储该业务日志
+     * @param ex 异常对象（Throwable）
+     * @return true-需要存储；false-不需要存储
+     * @author wan
      */
     protected abstract boolean shouldStoreWhenException(Throwable ex);
 
+    /**
+     * 异常处理
+     * @param ex 异常对象
+     * @author wan
+     */
     protected abstract void handleException(Throwable ex);
 
     protected boolean doException(Throwable ex){
-        handleException(ex);        // 不管发生异常是否存储，都进行异常处理
+        // 不管发生异常是否存储，都进行异常处理
+        handleException(ex);
         return shouldStoreWhenException(ex);
     }
 

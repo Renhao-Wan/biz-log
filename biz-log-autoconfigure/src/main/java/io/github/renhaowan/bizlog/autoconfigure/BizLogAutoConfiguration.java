@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Import;
 import java.util.Map;
 
 /**
+ * @author wan
  * 自动配置类
  */
 @AutoConfiguration
@@ -31,18 +32,39 @@ import java.util.Map;
         LogExecutorConfiguration.class, LogErrorHandlerConfiguration.class})
 public class BizLogAutoConfiguration {
 
+    /**
+     * 日志切面
+     *
+     * @param manager 日志管理器
+     * @param extraValue 额外的参数
+     * @return 日志切面
+     */
     @Bean
     @ConditionalOnMissingBean(BizLogAspect.class)
     public BizLogAspect bizLogAspect(BizLogManager manager, BizLogAspect.ExtendParseContextExtraValue extraValue) {
         return new BizLogAspect(manager, extraValue);
     }
 
+    /**
+     * 额外的参数
+     *
+     * @return 额外的参数
+     */
     @Bean
     @ConditionalOnMissingBean(BizLogAspect.ExtendParseContextExtraValue.class)
     public BizLogAspect.ExtendParseContextExtraValue extendParseContextExtraValue() {
         return Map::of;
     }
 
+    /**
+     * 日志管理器
+     *
+     * @param storageManager 日志存储器管理器
+     * @param parser 日志模板解析器
+     * @param executor 日志执行器
+     * @param errorHandler 日志异常处理器
+     * @return 日志管理器
+     */
     @Bean
     @ConditionalOnMissingBean(BizLogManager.class)
     public BizLogManager bizLogManager(LogStorageManager storageManager,

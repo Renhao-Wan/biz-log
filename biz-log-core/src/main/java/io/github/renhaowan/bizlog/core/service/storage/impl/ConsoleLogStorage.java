@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 /**
+ * @author wan
  * 控制台日志存储
  */
 @AllArgsConstructor
@@ -20,6 +21,11 @@ public class ConsoleLogStorage extends AbstractLogStorage {
 
     private ConsoleLogConfig logConfig;
 
+    /**
+     * 存储日志
+     *
+     * @param records 日志记录
+     */
     @Override
     public void store(BizLogRecord records) {
         switch (logConfig.getLogLevel().toUpperCase()){
@@ -61,26 +67,59 @@ public class ConsoleLogStorage extends AbstractLogStorage {
         return sb.toString();
     }
 
+    /**
+     * 是否处理异常
+     *
+     * @param ex 异常
+     * @return true: 处理异常
+     */
     @Override
     protected boolean shouldStoreWhenException(Throwable ex) {
         return true;
     }
 
+    /**
+     * 处理异常
+     *
+     * @param ex 异常
+     */
     @Override
     protected void handleException(Throwable ex) {
         log.error("【操作日志】发生异常: {}", ex.getMessage());
     }
 
+    /**
+     * 控制台日志配置
+     */
     @Builder
     @Getter
     public static class ConsoleLogConfig {
 
         private String logLevel;
 
+        /**
+         * 日志级别: DEBUG
+         */
         public static final String DEBUG = "DEBUG";
+
+        /**
+         * 日志级别: INFO
+         */
         public static final String INFO = "INFO";
+
+        /**
+         * 日志级别: WARN
+         */
         public static final String WARN = "WARN";
+
+        /**
+         * 日志级别: ERROR
+         */
         public static final String ERROR = "ERROR";
+
+        /**
+         * 日志级别: TRACE
+         */
         public static final String TRACE = "TRACE";
 
     }

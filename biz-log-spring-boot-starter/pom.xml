@@ -9,6 +9,8 @@
         <version>0.0.1</version>
     </parent>
 
+    <name>BizLog - Starter</name>
+    <description>Spring Boot Starter for BizLog authentication.</description>
     <artifactId>biz-log-spring-boot-starter</artifactId>
 
     <properties>

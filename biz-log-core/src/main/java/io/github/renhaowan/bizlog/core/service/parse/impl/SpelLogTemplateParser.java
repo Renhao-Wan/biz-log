@@ -26,6 +26,7 @@ import org.springframework.util.Assert;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * @author wan
  * SpEL 解析器（starter 默认）
  */
 @Order(1)
@@ -49,6 +50,13 @@ public class SpelLogTemplateParser implements LogTemplateParser {
     private final ApplicationContext applicationContext;
     private final SpelExpansionContext spelExpansionContext;
 
+
+    /**
+     * 构建Spel日志模板解析器，提供Spel表达式解析能力
+     * @param applicationContext Spring 上下文
+     * @param prop               配置
+     * @param spelExpansionContext 拓展上下文
+     */
     public SpelLogTemplateParser(ApplicationContext applicationContext, BizLogProperties prop, SpelExpansionContext spelExpansionContext) {
         this.applicationContext = applicationContext;
         this.spelExpansionContext = spelExpansionContext;
@@ -59,16 +67,27 @@ public class SpelLogTemplateParser implements LogTemplateParser {
                 .build();
     }
 
+    /**
+     * 是否支持当前语法
+     */
     @Override
     public boolean support(String template) {
         return template != null && template.contains("#{");
     }
 
+    /**
+     * 解析模板
+     *
+     * @param template 模板
+     * @param ctx      运行时上下文
+     * @return 解析后的纯文本
+     */
     @Override
     public String parse(String template, ParseContext ctx) {
+        // 只会在第一次执行
         Expression expression = exprCache.get(
                 template,
-                t -> parser.parseExpression(t, spelCtx)   // 只会在第一次执行
+                t -> parser.parseExpression(t, spelCtx)
         );
         EvaluationContext spelEvalCtx = buildEvaluationContext(ctx);
         Assert.notNull(expression, "SpEL Expression cannot be null");
@@ -108,6 +127,7 @@ public class SpelLogTemplateParser implements LogTemplateParser {
     }
 
     /**
+     * @author wan
      * 拓展 SpEL 上下文 : 外界可添加自定义变量
      */
     public interface SpelExpansionContext {
