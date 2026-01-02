@@ -1,6 +1,7 @@
 package io.github.renhaowan.bizlog.core.log.action;
 
 /**
+ * @author wan
  * 抽象业务行为，继承该抽象类，实现业务行为，主要重写了getCode()和getDesc()方法
  */
 public abstract class AbstractBizAction implements BizAction {

@@ -9,6 +9,8 @@
         <version>0.0.1</version>
     </parent>
 
+    <name>BizLog - AutoConfigure</name>
+    <description>Auto configuration for BizLog starter.</description>
     <artifactId>biz-log-autoconfigure</artifactId>
 
     <properties>

@@ -9,8 +9,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
+ * @author wan
  * 默认的日志线程
- *
  */
 public class DefaultLogExecutorProvider implements LogExecutorProvider {
 
@@ -21,9 +21,11 @@ public class DefaultLogExecutorProvider implements LogExecutorProvider {
         executor.setMaxPoolSize(prop.getAsync().getMaxPoolSize());
         executor.setQueueCapacity(prop.getAsync().getQueueCapacity());
         executor.setThreadNamePrefix(LogConstant.BIZ_LOG + "-");
-        executor.setWaitForTasksToCompleteOnShutdown(true); // 优雅停机
+        // 优雅停机
+        executor.setWaitForTasksToCompleteOnShutdown(true);
         executor.setAwaitTerminationSeconds(prop.getAsync().getAwaitTermination());
-        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());  // 线程池满时，调用方运行
+        // 线程池满时，调用方运行
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.initialize(); // 触发 afterPropertiesSet
     }
 

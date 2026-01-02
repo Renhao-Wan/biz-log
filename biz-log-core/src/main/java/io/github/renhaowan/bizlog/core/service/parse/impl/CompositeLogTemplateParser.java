@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 
 /**
+ * @author wan
  * 把系统中所有 LogTemplateParser 实现类按 @Order 排序，组成一条责任链。
  * 对外暴露的唯一入口；AOP 切面只依赖它，不直接依赖任何具体语法解析器。
  * 实现“优先级 + 降级”：
@@ -18,11 +19,18 @@ public class CompositeLogTemplateParser implements LogTemplateParser {
     private final List<LogTemplateParser> chain;
     private final BizLogProperties prop;
 
+    /**
+     * @param parsers 语法解析器
+     * @param prop 配置属性
+     */
     public CompositeLogTemplateParser(List<LogTemplateParser> parsers, BizLogProperties prop) {
         this.prop = prop;
         this.chain = parsers;
     }
 
+    /**
+     * 遍历责任链，找到第一个支持的解析器，并调用其解析方法
+     */
     @Override
     public String parse(String template, ParseContext ctx) {
         for (LogTemplateParser p : chain) {

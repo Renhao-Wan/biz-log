@@ -3,12 +3,20 @@ package io.github.renhaowan.bizlog.core.log.annotation;
 import java.lang.annotation.*;
 
 /**
+ * @author wan
  * 拓展参数
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface ExtraValue {
-    String k();      // map键
-    String v();      // map值：支持模版语法
+    /**
+     * key: map key
+     */
+    String k();
+
+    /**
+     * value: map value， 支持模板解析
+     */
+    String v();
 }

@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
+ * @author wan
  * 日志切面
  */
 @Aspect
@@ -24,12 +25,25 @@ public class BizLogAspect {
     private final ParameterNameDiscoverer nameDiscoverer = new DefaultParameterNameDiscoverer();
     private final ExtendParseContextExtraValue extendParseContextExtraValue;
 
+    /**
+     * 构造函数
+     * @param bizLogManager 日志管理器
+     * @param extendParseContextExtraValue 扩展解析上下文额外参数
+     * @author wan
+     */
     public BizLogAspect(BizLogManager bizLogManager, ExtendParseContextExtraValue extendParseContextExtraValue) {
         this.bizLogManager = bizLogManager;
         this.extendParseContextExtraValue = extendParseContextExtraValue;
     }
 
-    // 记录日志切面
+    /**
+     * AOP环绕通知，用于拦截标记了@BizLog的方法，执行日志记录逻辑
+     * @param pjp 切面连接点，用于获取方法信息和执行原方法
+     * @param bizLog 业务日志注解，获取注解配置的参数
+     * @return 原方法的执行结果
+     * @throws Throwable 原方法执行过程中抛出的所有异常
+     * @author wan
+     */
     @Around("@annotation(bizLog)")
     public Object around(ProceedingJoinPoint pjp, BizLog bizLog) throws Throwable {
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
@@ -37,17 +51,21 @@ public class BizLogAspect {
         Throwable thrown = null;
 
         try {
-            retVal = pjp.proceed(); // 执行业务
+            // 执行业务
+            retVal = pjp.proceed();
         } catch (Throwable ex) {
             thrown = ex;
-            throw ex;               // 继续抛出
+            // 继续抛出
+            throw ex;
         } finally {
             // 无论成功还是异常都会记录
             Map<String, Object> argsMap = this.buildExtraMap(method, pjp.getArgs(), nameDiscoverer);
             Map<String, Object> extra = new HashMap<>();
             extra.put("actionCode", bizLog.actionCode());
-            extendExtraValue(extra);         // 扩展参数（接口）
-            extendExtraValue(bizLog.extras(), extra);   // 扩展参数（ExtraValue注解）
+            // 扩展参数（接口）
+            extendExtraValue(extra);
+            // 扩展参数（ExtraValue注解）
+            extendExtraValue(bizLog.extras(), extra);
 
             ParseContext ctx = ParseContext.builder()
                     .method(method)

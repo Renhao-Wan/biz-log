@@ -9,6 +9,8 @@
         <version>0.0.1</version>
     </parent>
 
+    <name>BizLog - Core</name>
+    <description>Core module for BizLog starter.</description>
     <artifactId>biz-log-core</artifactId>
 
     <properties>

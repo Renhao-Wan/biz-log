@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
+ * @author wan
  * 业务日志记录实体类
  */
 @Data
@@ -17,9 +18,19 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BizLogRecord {
-    private AbstractBizAction action;       // 动作编码（删除/新增…）
-    private String content;                 // 模板解析后的文本
-    private Throwable throwable;                // 异常
-    private Map<String, Object> extra;      // 任意扩展
-    private LocalDateTime time;             // 时间
+
+    // 动作编码（删除/新增…）
+    private AbstractBizAction action;
+
+    // 模板解析后的文本
+    private String content;
+
+    // 异常
+    private Throwable throwable;
+
+    // 任意扩展
+    private Map<String, Object> extra;
+
+    // 时间
+    private LocalDateTime time;
 }

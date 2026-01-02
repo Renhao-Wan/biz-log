@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
+ * @author wan
  * biz-log 配置属性
  */
 @Data
@@ -22,6 +23,7 @@ public class BizLogProperties {
     /** 模板解析器参数 */
     private final Parser parser = new Parser();
 
+    /** 异步线程池参数 */
     @Data
     public static class Async {
         /** 核心线程数 */
@@ -36,6 +38,7 @@ public class BizLogProperties {
         private int awaitTermination = 30;
     }
 
+    /** 模板解析器参数 */
     @Data
     public static class Parser {
         /** 解析失败是否回退到原文本 */
@@ -43,6 +46,7 @@ public class BizLogProperties {
         /** Spel解析器 */
         private final Spel spel = new Spel();
 
+        /** Spel解析器参数 */
         @Data
         public static class Spel {
             /** 是否启用 SpEL 解析器 */

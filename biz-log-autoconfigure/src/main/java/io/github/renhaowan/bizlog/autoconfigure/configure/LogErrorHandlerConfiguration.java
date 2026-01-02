@@ -11,11 +11,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * @author wan
  * 默认异常处理器
  */
 @Configuration
 public class LogErrorHandlerConfiguration {
 
+    /**
+     * 创建默认异常处理器
+     *
+     * @param consoleLogStorage 日志存储器
+     * @return 默认异常处理器
+     */
     @Bean
     @ConditionalOnMissingBean(LogErrorHandler.class)
     public LogErrorHandler logErrorHandler(@Qualifier(LogConstant.DEFAULT_STORAGE_BEAN_NAME)

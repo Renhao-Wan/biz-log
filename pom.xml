@@ -15,7 +15,7 @@
     </modules>
 
     <name>BizLog Spring Boot Starter</name>
-    <description>一个轻量级的业务日志记录组件</description>
+    <description>一个轻量级的业务日志记录组件，支持多端存储、模板解析、异步存储等功能</description>
     <url>https://github.com/Renhao-Wan/biz-log</url>
 
     <licenses>
