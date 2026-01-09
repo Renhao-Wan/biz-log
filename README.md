@@ -1,6 +1,6 @@
 # biz-log-spring-boot-starter
 
-![](https://img.shields.io/maven-central/v/io.github.renhao-wan/biz-log-spring-boot-starter) [![Java CI with Maven](https://github.com/Renhao-Wan/biz-log/actions/workflows/maven.yml/badge.svg)](https://github.com/Renhao-Wan/biz-log/actions/workflows/maven.yml)
+![](https://img.shields.io/maven-central/v/io.github.renhao-wan/biz-log-spring-boot-starter) [![Java CI with Maven](https://github.com/Renhao-Wan/biz-log/actions/workflows/maven.yml/badge.svg)](https://github.com/Renhao-Wan/biz-log/actions/workflows/maven.yml) ![Java](https://img.shields.io/badge/Java-17+-blue.svg) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen.svg) ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ## 1. 项目介绍
 
