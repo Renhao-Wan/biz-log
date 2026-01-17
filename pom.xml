@@ -6,7 +6,7 @@
 
     <groupId>io.github.renhao-wan</groupId>
     <artifactId>biz-log-parent</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <packaging>pom</packaging>
     <modules>
         <module>biz-log-core</module>

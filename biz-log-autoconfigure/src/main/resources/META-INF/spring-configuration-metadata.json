@@ -1,0 +1,94 @@
+{
+  "groups": [
+    {
+      "name": "biz.log",
+      "type": "io.github.renhaowan.bizlog.core.log.BizLogProperties",
+      "sourceType": "io.github.renhaowan.bizlog.core.log.BizLogProperties"
+    },
+    {
+      "name": "biz.log.async",
+      "type": "io.github.renhaowan.bizlog.core.log.BizLogProperties$AsyncProperties",
+      "sourceType": "io.github.renhaowan.bizlog.core.log.BizLogProperties",
+      "sourceMethod": "getAsync()"
+    },
+    {
+      "name": "biz.log.parser",
+      "type": "io.github.renhaowan.bizlog.core.log.BizLogProperties$ParserProperties",
+      "sourceType": "io.github.renhaowan.bizlog.core.log.BizLogProperties",
+      "sourceMethod": "getParser()"
+    },
+    {
+      "name": "biz.log.parser.spel",
+      "type": "io.github.renhaowan.bizlog.core.log.BizLogProperties$ParserProperties$SpelProperties",
+      "sourceType": "io.github.renhaowan.bizlog.core.log.BizLogProperties$ParserProperties",
+      "sourceMethod": "getSpel()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "biz.log.enabled",
+      "type": "java.lang.Boolean",
+      "description": "全局开关，默认为true。",
+      "defaultValue": true
+    },
+    {
+      "name": "biz.log.storage-bean-name",
+      "type": "java.util.List<java.lang.String>",
+      "description": "默认存储器名称，支持配置多个存储器 Bean 名称。"
+    },
+    {
+      "name": "biz.log.async.core-pool-size",
+      "type": "java.lang.Integer",
+      "description": "核心线程数。",
+      "defaultValue": 4
+    },
+    {
+      "name": "biz.log.async.max-pool-size",
+      "type": "java.lang.Integer",
+      "description": "最大线程数。",
+      "defaultValue": 8
+    },
+    {
+      "name": "biz.log.async.queue-capacity",
+      "type": "java.lang.Integer",
+      "description": "队列容量。",
+      "defaultValue": 200
+    },
+    {
+      "name": "biz.log.async.thread-name-prefix",
+      "type": "java.lang.String",
+      "description": "线程名前缀。",
+      "defaultValue": "BizLog-"
+    },
+    {
+      "name": "biz.log.async.await-termination",
+      "type": "java.lang.Integer",
+      "description": "优雅停机等待时间（秒）。",
+      "defaultValue": 30
+    },
+    {
+      "name": "biz.log.parser.fallback-to-plain",
+      "type": "java.lang.Boolean",
+      "description": "解析失败是否回退到原文本。",
+      "defaultValue": true
+    },
+    {
+      "name": "biz.log.parser.spel.enabled",
+      "type": "java.lang.Boolean",
+      "description": "是否启用SpEL解析器。",
+      "defaultValue": true
+    },
+    {
+      "name": "biz.log.parser.spel.cache-size",
+      "type": "java.lang.Integer",
+      "description": "SpEL解析器缓存大小。",
+      "defaultValue": 100
+    },
+    {
+      "name": "biz.log.parser.spel.cache-time",
+      "type": "java.lang.Integer",
+      "description": "SpEL解析器缓存时间（秒）。",
+      "defaultValue": 120
+    }
+  ]
+}

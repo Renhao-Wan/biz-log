@@ -1,0 +1,33 @@
+{
+  "properties": [
+    {
+      "name": "biz.log.storage-bean-name",
+      "type": "java.util.List<java.lang.String>",
+      "description": "默认存储器名称，建议填写 Spring Bean 名称."
+    }
+  ],
+  "hints": [
+    {
+      "name": "biz.log.storage-bean-name",
+      "values": [
+        {
+          "value": "consoleLogStorage",
+          "description": "默认的控制台输出存储器."
+        },
+        {
+          "value": "customLogStorage",
+          "description": "示例：自定义存储器."
+        }
+      ]
+    },
+    {
+      "name": "biz.log.async.thread-name-prefix",
+      "values": [
+        {
+          "value": "BizLog-",
+          "description": "默认前缀."
+        }
+      ]
+    }
+  ]
+}

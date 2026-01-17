@@ -1,5 +1,7 @@
 # biz-log-spring-boot-starter
 
+📖 **深入了解架构原理**：[点击查看架构设计文档](docs/DESIGN_DOC.md)
+
 ![](https://img.shields.io/maven-central/v/io.github.renhao-wan/biz-log-spring-boot-starter) [![Java CI with Maven](https://github.com/Renhao-Wan/biz-log/actions/workflows/maven.yml/badge.svg)](https://github.com/Renhao-Wan/biz-log/actions/workflows/maven.yml) ![Java](https://img.shields.io/badge/Java-17+-blue.svg) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen.svg) ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ## 1. 项目介绍
@@ -10,13 +12,13 @@ biz-log-spring-boot-starter是一个轻量级的业务日志记录组件，基�
 
 ### 2.1 引入依赖
 
-在Spring Boot项目的pom.xml中添加以下依赖：
+**版本号请替换为GitHub/Maven中央仓库的最新版本**
 
 ```xml
 <dependency>
-    <groupId>io.github.renhao-wan</groupId>
-    <artifactId>biz-log-spring-boot-starter</artifactId>
-    <version>${latest.version}</version>             <!--以下载的最新版本为准-->
+   <groupId>io.github.renhao-wan</groupId>
+   <artifactId>biz-log-spring-boot-starter</artifactId>
+   <version>${latest.version}</version>
 </dependency>
 ```
 
@@ -28,15 +30,14 @@ biz-log-spring-boot-starter是一个轻量级的业务日志记录组件，基�
 @Service
 public class UserService {
 
-    @BizLog(
-        value = "用户#{#user.name}(#{#user.id})进行了#{#action}操作",
-        bizId = "#{#user.id}",
-        actionCode = StdBizAction.UPDATE_CODE,
-        extras = { @ExtraValue(k = "test", v = "额外参数") }
-    )
-    public void updateUser(User user, String action) {
-        // 业务逻辑
-    }
+   @BizLog(
+           value = "用户#{#user.name}(#{#user.id})进行了#{#action}操作",
+           actionCode = StdBizAction.UPDATE_CODE,
+           extras = { @ExtraValue(k = "test", v = "额外参数") }
+   )
+   public void updateUser(User user, String action) {
+      // 业务逻辑
+   }
 }
 ```
 
@@ -49,13 +50,10 @@ public class UserService {
 | 参数名          | 类型         | 描述                            | 默认值                     |
 | --------------- | ------------ | ------------------------------- | :------------------------- |
 | value           | String       | 日志内容，支持模板语法          | 无                         |
-| bizId           | String       | 业务主键，支持模板语法          | 空字符串                   |
 | actionCode      | String       | 动作编码                        | 空字符串                   |
 | async           | boolean      | 是否异步记录                    | true                       |
 | storageBeanName | String       | 存储器名称                      | 空字符串（使用默认存储器） |
 | extras          | ExtraValue[] | 自定义额外参数（v支持模版语法） | 空数组                     |
-
-- bizlog在1.1.0版本进行了移除
 
 ### 3.2 SpEL 语法速查
 
@@ -83,19 +81,18 @@ public class UserService {
 ```java
 @Service
 public class OrderService {
-    @Autowired
-    private BizLogManager bizLogManager;
+   @Autowired
+   private BizLogManager bizLogManager;
 
-    public void createOrder(Order order) {
-        // 业务逻辑
-        // 手动记录日志
-        bizLogManager.record(
-            StdBizAction.CREATE_CODE,
-            "创建订单：订单号1，金额10",
-            order.getId(),
-            true
-        );
-    }
+   public void createOrder(Order order) {
+      // 业务逻辑
+      // 手动记录日志
+      bizLogManager.record(
+              StdBizAction.CREATE_CODE,
+              "创建订单：订单号1，金额10",
+              true
+      );
+   }
 }
 ```
 
@@ -107,35 +104,35 @@ public class OrderService {
 
 ```yaml
 biz:
-  log:
-    enabled: true  # 全局开关，默认为true
-    storage-bean-name: consoleLogStorage  # 默认存储器名称
+   log:
+      enabled: true  # 全局开关，默认为true
+      storage-bean-name: consoleLogStorage  # 默认存储器名称
 ```
 
 ### 4.2 异步线程池配置
 
 ```yaml
 biz:
-  log:
-    async:
-      core-pool-size: 4  # 核心线程数
-      max-pool-size: 8  # 最大线程数
-      queue-capacity: 200  # 队列容量
-      thread-name-prefix: BizLog-  # 线程名前缀
-      await-termination: 30  # 优雅停机等待时间（秒）
+   log:
+      async:
+         core-pool-size: 4  # 核心线程数
+         max-pool-size: 8  # 最大线程数
+         queue-capacity: 200  # 队列容量
+         thread-name-prefix: BizLog-  # 线程名前缀
+         await-termination: 30  # 优雅停机等待时间（秒）
 ```
 
 ### 4.3 模板解析器配置
 
 ```yaml
 biz:
-  log:
-    parser:
-      fallback-to-plain: true  # 解析失败是否回退到原文本
-      spel:
-        enabled: true  # 是否启用SpEL解析器
-        cache-size: 100  # SpEL解析器缓存大小
-        cache-time: 120  # SpEL解析器缓存时间（秒）
+   log:
+      parser:
+         fallback-to-plain: true  # 解析失败是否回退到原文本
+         spel:
+            enabled: true  # 是否启用SpEL解析器
+            cache-size: 100  # SpEL解析器缓存大小
+            cache-time: 120  # SpEL解析器缓存时间（秒）
 ```
 
 ## 5. 业务拓展
@@ -154,20 +151,20 @@ _注册自定义动作编码_
 ```java
 // 注册方式1：使用AbstractBizAction对象
 AbstractBizAction customAction = new AbstractBizAction() {
-    @Override
-    public String getCode() {
-        return "CUSTOM";
-    }
-    @Override
-    public String getDesc() {
-        return "自定义动作";
-    }
+   @Override
+   public String getCode() {
+      return "CUSTOM";
+   }
+   @Override
+   public String getDesc() {
+      return "自定义动作";
+   }
 };
 BizActions.register(customAction);
- 
+
 // 注册方式2：使用code和desc字符串对
 BizActions.register("APPROVE", "审批");
- 
+
 // 注册方式3：批量注册
 List<AbstractBizAction> actions = new ArrayList<>();
 // 添加动作...
@@ -202,38 +199,52 @@ import org.springframework.core.annotation.Order;
 
 @Order(2) // 优先级介于SpEL和纯文本之间
 public class MyCustomLogTemplateParser implements LogTemplateParser {
-    @Override
-    public boolean support(String template) {
-        return template != null && template.contains("${");
-    }
+   @Override
+   public boolean support(String template) {
+      return template != null && template.contains("${");
+   }
 
-    @Override
-    public String parse(String template, ParseContext ctx) {
-        // 自定义解析逻辑
-        // 例如解析${variable}格式的占位符
-        String result = template;
-        for (Map.Entry<String, Object> entry : ctx.getExtra().entrySet()) {
-            result = result.replace("${" + entry.getKey() + "}", entry.getValue().toString());
-        }
-        return result;
-    }
+   @Override
+   public String parse(String template, ParseContext ctx) {
+      // 自定义解析逻辑
+      // 例如解析${variable}格式的占位符
+      String result = template;
+      for (Map.Entry<String, Object> entry : ctx.getExtra().entrySet()) {
+         result = result.replace("${" + entry.getKey() + "}", entry.getValue().toString());
+      }
+      return result;
+   }
 }
 ```
 
-### 5.4 自定义存储器
+### 5.4 存储器
+
+#### 5.4.1 自定义存储器
 
 默认使用 `consoleLogStorage` 存储器进行存储：即打印业务日志到控制台上
-继承`AbstractLogStorage`抽象类来自定义日志存储方式(1.1.1版本进行了完善)：
+继承`AbstractLogStorage`抽象类来自定义日志存储方式：
 
 ```java
 @Component("customStorage")
 public class CustomLogStorage extends AbstractLogStorage {
 
-    @Override
-    public void store(BizLogRecord record) {
-        // 自定义存储逻辑，如存储到数据库、ES等
-        System.out.println("自定义存储日志：" + record);
-    }
+   @Override
+   public void store(BizLogRecord record) {
+      // 自定义存储逻辑，如存储到数据库、ES等
+      // ... 具体入库代码
+   }
+
+   // 方法发生异常时是否继续进行存储(即业务方法抛错，日志是否还需要记录)
+   @Override
+   protected boolean shouldStoreWhenException(Throwable ex) {
+      return true;
+   }
+
+   // 处理存储过程中的异常（防止日志存储失败影响业务或用于监控报警）
+   @Override
+   protected void handleException(Throwable ex) {
+      log.error("【操作日志】发生异常: {}", ex.getMessage());
+   }
 }
 ```
 
@@ -241,11 +252,11 @@ public class CustomLogStorage extends AbstractLogStorage {
 
 ```java
 @BizLog(
-    value = "用户操作日志",
-    storageBeanName = "customStorage"       // 优先级大于yml配置
+        value = "用户操作日志",
+        storageBeanName = "customStorage"       // 优先级大于yml配置
 )
 public void userOperation() {
-    // 业务逻辑
+   // 业务逻辑
 }
 ```
 
@@ -253,8 +264,53 @@ public void userOperation() {
 
 ```yaml
 biz:
-  log:
-    storage-bean-name: customStorage
+   log:
+      storage-bean-name: customStorage
+```
+
+### 5.4.2 多存储器支持
+
+支持多个存储器同时工作
+
+```yml
+# ... (原有内容)
+biz:
+   log:
+      # ...
+      # 支持配置多个存储器 Bean 名称
+      storage-bean-name:
+         - consoleLogStorage
+         - customSLogtorage
+```
+
+**存储策略优先级**：
+组件支持全局配置与注解级配置覆盖。优先级规则为：**注解指定 > 全局配置**。
+
+如下例所示，当注解中指定了 `storageBeanName`，将忽略全局配置，仅使用注解中指定的存储器：
+
+```java
+@BizLog(
+        value = "用户#{#user.name}进行了#{#action}操作",
+        // 仅使用控制台和自定义存储，忽略全局配置
+        storageBeanName = {"consoleLogStorage", "customLogStorage"},
+        extras = {
+                @ExtraValue(k = "userId", v = "#{#user.id}")
+        }
+)
+public void updateUser(User user) { ... }
+```
+
+#### 5.4.3 控制台日志级别
+
+默认情况下 `ConsoleLogStorage` 使用 INFO 级别输出。如需调整（例如改为 DEBUG 或 WARN），可注入配置 Bean：
+
+```java
+@Bean
+public ConsoleLogStorage.ConsoleLogConfig consoleLogConfig() {
+   return ConsoleLogStorage.ConsoleLogConfig.builder()
+           .logLevel(ConsoleLogStorage.ConsoleLogConfig.INFO)
+           .build();
+}
 ```
 
 ### 5.5 自定义错误处理器
@@ -266,11 +322,11 @@ biz:
 @Component
 public class CustomLogErrorHandler implements LogErrorHandler {
 
-    @Override
-    public void onError(BizLogRecord record, Throwable ex) {
-        // 自定义错误处理逻辑
-        log.error("记录日志失败: {}", record, e);
-    }
+   @Override
+   public void onError(BizLogRecord record, Throwable ex) {
+      // 自定义错误处理逻辑
+      log.error("记录日志失败: {}", record, e);
+   }
 }
 ```
 
@@ -294,7 +350,6 @@ public class CustomLogErrorHandler implements LogErrorHandler {
            bizLogManager.record(
                StdBizAction.CREATE_CODE,
                "创建订单：订单号1，金额10",
-               order.getId(),
                true,
                Map.of("securityContext", securityContext)   //将springContext上下文传入BizLogRecord额外变量中
            );
@@ -348,33 +403,32 @@ public class CustomLogErrorHandler implements LogErrorHandler {
 @RequestMapping("/api/user")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+   @Autowired
+   private UserService userService;
 
-    @PostMapping("/operate")
-    public ResponseEntity<String> operateUser(@RequestBody UserOperationRequest request) {
-        userService.operateUser(request.getUser(), request.getAction());
-        return ResponseEntity.ok("操作成功");
-    }
+   @PostMapping("/operate")
+   public ResponseEntity<String> operateUser(@RequestBody UserOperationRequest request) {
+      userService.operateUser(request.getUser(), request.getAction());
+      return ResponseEntity.ok("操作成功");
+   }
 }
 
 @Service
 public class UserService {
 
-    @BizLog(
-        value = "用户#{#user.name}(#{#user.id})进行了#{#action}操作",
-        bizId = "#{#user.id}",
-        actionCode = StdBizAction.UPDATE_CODE,
-        async = true,
-        extras = {
-            @ExtraValue(k = "userName", v = "#{#user.name}"),
-            @ExtraValue(k = "userId", v = "#{#user.id}"),
-        }
-    )
-    public void updateUser(User user, String action) {
-        // 业务逻辑
-        System.out.println("执行用户操作: " + action + " for user: " + user.getName());
-    }
+   @BizLog(
+           value = "用户#{#user.name}(#{#user.id})进行了#{#action}操作",
+           actionCode = StdBizAction.UPDATE_CODE,
+           async = true,
+           extras = {
+                   @ExtraValue(k = "userName", v = "#{#user.name}"),
+                   @ExtraValue(k = "userId", v = "#{#user.id}"),
+           }
+   )
+   public void updateUser(User user, String action) {
+      // 业务逻辑
+      System.out.println("执行用户操作: " + action + " for user: " + user.getName());
+   }
 }
 ```
 
@@ -384,33 +438,32 @@ public class UserService {
 @Service
 public class OrderService {
 
-    @Autowired
-    private BizLogManager bizLogManager;
+   @Autowired
+   private BizLogManager bizLogManager;
 
-    public Order createOrder(OrderDTO orderDTO) {
-        // 创建订单业务逻辑
-        Order order = new Order();
-        order.setId(UUID.randomUUID().toString());
-        order.setOrderNo(orderDTO.getOrderNo());
-        order.setAmount(orderDTO.getAmount());
-        order.setCreateTime(LocalDateTime.now());
+   public Order createOrder(OrderDTO orderDTO) {
+      // 创建订单业务逻辑
+      Order order = new Order();
+      order.setId(UUID.randomUUID().toString());
+      order.setOrderNo(orderDTO.getOrderNo());
+      order.setAmount(orderDTO.getAmount());
+      order.setCreateTime(LocalDateTime.now());
 
-        // 手动记录日志
-        bizLogManager.record(
-            StdBizAction.CREATE_CODE,
-            "创建订单：订单号{orderNo}，金额{amount}".replace("{orderNo}", order.getOrderNo()).replace("{amount}", order.getAmount().toString()),
-            order.getId(),
-            true
-        );
+      // 手动记录日志
+      bizLogManager.record(
+              StdBizAction.CREATE_CODE,
+              "创建订单：订单号{orderNo}，金额{amount}".replace("{orderNo}", order.getOrderNo()).replace("{amount}", order.getAmount().toString()),
+              true
+      );
 
-        return order;
-    }
+      return order;
+   }
 }
 ```
 
 ## 7. 注意事项
 
-1. 确保Spring Boot版本与starter兼容（当前支持Spring Boot 3.4.7+）。
+1. 确保Spring Boot版本与starter兼容（当前支持Spring Boot 3+）。
 2. 模板语法支持SpEL表达式，可以通过`#{#表达式}`来引用方法参数和返回值。
 3. 异步记录日志时，确保线程池配置合理，避免线程资源耗尽。
 4. 对响应速度要求较高的场景下建议使用手动调用的方式记录日志
@@ -418,36 +471,7 @@ public class OrderService {
 
 ## 8. 其它
 
-### 8.1 执行流程图
-
-```mermaid
-flowchart TD
-    %% ========== 起始节点 ==========
-   B{调用方式？}
-    
-    %% ========== 注解方式链路 ==========
-    B -->|注解方式| C[方法标注@BizLog]
-    C --> D[进入BizLogAspect并封装ParseContext解析上下文]
-    D --> F[调用bizLogManager根据解析上下文并调用CompositeLogTemplateParser（责任链解析模板）创建BizLogRecord日志对象]
-
-    %% ========== 手动调用链路 ==========
-    B -->|手动调用| G
-    
-    %% ========== 公共链路 ==========
-    F --> G[调用bizLogManager记录日志]
-    G --> H{异步？}
-    H -->|是| I[LogExecutorProvider获取线程池]
-    H -->|否| J[同步执行]
-    I --> K
-    J --> K[storageManager.store（策略模式选择存储器）]
-    
-    K --> L{存储成功？}
-    L -->|是| Z([结束])
-    L -->|否| M[LogErrorHandler.onError回调处理]
-    M --> Z
-```
-
-### 8.2 如何让IDEA识别SpEL表达式？
+### 8.1 如何让IDEA识别SpEL表达式？
 
 1. 第一步：下载插件 _SpEL Assistant_
 
@@ -497,81 +521,3 @@ flowchart TD
 
 3. 添加`src/main/resources/spel-extension.json`文件后建议使用模版语法时都加`#{}`边界，否则插件会报错（不影响程序的正常执行）
 
-### 8.4 版本迭代
-
-#### 版本1.0.0
-
-初始发布
-
-#### 版本1.1.0
-
-注解@bizlog移除bizId属性（若使用了_SpEL Assistant_，src/main/resources/spel-extension.json文件中移除相应的部分）
-
-#### 版本1.1.1
-
-完善存储器异常处理机制
-
-  ```java
-@Component("customStorage")
-public class CustomLogStorage extends AbstractLogStorage {
-
-    @Override
-    public void store(BizLogRecord record) {
-        // 自定义存储逻辑，如存储到数据库、ES等
-        System.out.println("自定义存储日志：" + record);
-    }
-    
-    // 方法发生异常时是否继续进行存储(注解标注的方法发生异常)
-    @Override
-    protected boolean shouldStoreWhenException(Throwable ex) {
-        return true;
-    }
-
-    // 对异常进行存储
-    @Override
-    protected void handleException(Throwable ex) {
-        log.error("【操作日志】发生异常: {}", ex.getMessage());
-    }
-}
-  ```
-
-#### 版本1.1.2
-
-可以设置控制台存储的日志记录级别
-
-  ```java
-@Bean
-public ConsoleLogStorage.ConsoleLogConfig logLevel() {
-    return ConsoleLogStorage.ConsoleLogConfig.builder()
-            .logLevel(ConsoleLogStorage.ConsoleLogConfig.INFO)            // 设置输出日志级别
-            .build();
-}
-  ```
-
-
-#### 版本1.1.3
-
-支持多个存储器同时工作（注解>全局配置）
-全局配置：
-
-  ```yml
-biz:
-  log:
-    storage-bean-name: 
-    	- consoleLogStorage
-    	- customeLogStorage
-  ```
-
-注解：
-
-  ```java
-@BizLog(
-        value = "用户#{#user.name}(#{#user.id})进行了#{#action}操作",
-        actionCode = StdBizAction.UPDATE_CODE,
-    	storageBeanName = {consoleLogStorage, customeLogStorage}
-        extras = {
-            @ExtraValue(k = "userName", v = "#{#user.name}"),
-            @ExtraValue(k = "userId", v = "#{#user.id}"),
-        }
-    )
-  ```
