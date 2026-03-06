@@ -34,7 +34,7 @@ public class TemplateParserConfiguration {
     @ConditionalOnProperty(prefix = "biz.log.parser", name = "enable-spel", havingValue = "true"
             , matchIfMissing = true)
     public SpelLogTemplateParser spelLogTemplateParser(ApplicationContext applicationContext, SpelLogTemplateParser.SpelExpansionContext spelExpansionContext) {
-        return new SpelLogTemplateParser(applicationContext, prop, spelExpansionContext);
+        return new SpelLogTemplateParser(applicationContext, spelExpansionContext);
     }
 
     /**

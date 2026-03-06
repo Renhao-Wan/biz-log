@@ -1,12 +1,9 @@
 package io.github.renhaowan.bizlog.core.service.parse.impl;
 
-import io.github.renhaowan.bizlog.core.log.BizLogProperties;
 import io.github.renhaowan.bizlog.core.log.LogConstant;
 import io.github.renhaowan.bizlog.core.service.error.BizLogException;
 import io.github.renhaowan.bizlog.core.service.parse.LogTemplateParser;
 import io.github.renhaowan.bizlog.core.service.parse.ParseContext;
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.expression.BeanFactoryResolver;
@@ -23,8 +20,6 @@ import org.springframework.expression.spel.support.ReflectivePropertyAccessor;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.util.Assert;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * @author wan
  * SpEL 解析器（starter 默认）
@@ -33,16 +28,11 @@ import java.util.concurrent.TimeUnit;
 @Slf4j(topic = LogConstant.BIZ_LOG)
 public class SpelLogTemplateParser implements LogTemplateParser {
 
-    // 二次缓存：模板（template) -> Expression（跳过解析）
-    // 缓存的是“模板 → AST”，不是“模板 → 结果”。
-    // 结果值始终由当前 EvaluationContext 决定，与上一次无关。
-    // 不通过ParseContext->EvaluationContext缓存：避免脏读, EvaluationContext 每次都重新构建（很轻），真正昂贵的是 Expression 的 AST。
-    private final Cache<String, Expression> exprCache;
 
-    // SpEL 引擎 ：// 擎级缓存：Expression -> 字节码
-    // 传 null 表示“使用当前线程上下文类加载器”，这是官方允许的默认值。
+    // SpEL 引擎 ：采用混合模式
+    // 传 null 表示“使用当前线程上下文类加载器”。
     private final SpelExpressionParser parser = new SpelExpressionParser(
-            new SpelParserConfiguration(SpelCompilerMode.IMMEDIATE, null)
+            new SpelParserConfiguration(SpelCompilerMode.MIXED, null)
     );
     //指定模板定界符：#{ }
     private final TemplateParserContext spelCtx = new TemplateParserContext("#{", "}");
@@ -54,17 +44,11 @@ public class SpelLogTemplateParser implements LogTemplateParser {
     /**
      * 构建Spel日志模板解析器，提供Spel表达式解析能力
      * @param applicationContext Spring 上下文
-     * @param prop               配置
      * @param spelExpansionContext 拓展上下文
      */
-    public SpelLogTemplateParser(ApplicationContext applicationContext, BizLogProperties prop, SpelExpansionContext spelExpansionContext) {
+    public SpelLogTemplateParser(ApplicationContext applicationContext, SpelExpansionContext spelExpansionContext) {
         this.applicationContext = applicationContext;
         this.spelExpansionContext = spelExpansionContext;
-        BizLogProperties.Parser.Spel spel = prop.getParser().getSpel();
-        this.exprCache = Caffeine.newBuilder()
-                .maximumSize(spel.getCacheSize())
-                .expireAfterAccess(spel.getCacheTime(), TimeUnit.SECONDS)
-                .build();
     }
 
     /**
@@ -84,11 +68,7 @@ public class SpelLogTemplateParser implements LogTemplateParser {
      */
     @Override
     public String parse(String template, ParseContext ctx) {
-        // 只会在第一次执行
-        Expression expression = exprCache.get(
-                template,
-                t -> parser.parseExpression(t, spelCtx)
-        );
+        Expression expression = parser.parseExpression(template, spelCtx);
         EvaluationContext spelEvalCtx = buildEvaluationContext(ctx);
         Assert.notNull(expression, "SpEL Expression cannot be null");
         try {
